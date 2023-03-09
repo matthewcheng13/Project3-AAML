@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project3</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="gradient-boosting">Gradient Boosting</h1>
+<p>Previously, we have implemented several forms of Locally Weighted and Regression and we have compared their performance against a Random Forest Classifier. Now, we will investigate Gradient Boosting. With this technique, we can strengthen our models without introducing a new model.</p>
+<h2 id="gradient-boosting-1">Gradient Boosting</h2>
+<p>So, what exactly is gradient boosting and how does it work? With gradient boosting, we can improve our regressor by training a second regressor on the residuals of the original regressor. In order to accomplish this, we:</p>
+<ol>
+<li>Train a regressor, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.13889em;">F</span></span></span></span></span>, on training data, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">x_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.58056em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span>.</li>
+<li>Calculate the residuals of this regressor by subtracting the predicted values with the actual values: <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mn>1</mn></msub><mo>=</mo><msub><mi>y</mi><mn>1</mn></msub><mo>−</mo><mi>F</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">r_1 = y_1 - F(x_1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.58056em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: -0.02778em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.77777em; vertical-align: -0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: -0.03588em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.13889em;">F</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>.</li>
+<li>Choose our second regressor, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">h</span></span></span></span></span>. This can be the same as our first, and it can be different. For example, we may use Lowess for both regressors, or we can use Lowess as our first regressor, or weak learner and then use Random Forest as our second regressor.</li>
+<li>Train our second regressor using the residuals, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">r_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.58056em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: -0.02778em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span>, that we calculated above.</li>
+<li>Form new predictions with our final regressor, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>+</mo><mi>h</mi></mrow><annotation encoding="application/x-tex">F + h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.76666em; vertical-align: -0.08333em;"></span><span class="mord mathnormal" style="margin-right: 0.13889em;">F</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">h</span></span></span></span></span>. Both regressors will now be fed new data, <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">x_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.58056em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> and their final predictions will be summed to yield our improved prediction. This would look like: <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>+</mo><mi>h</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">F(x_2) + h(x_2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.13889em;">F</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>.</li>
+</ol>
+<h2 id="implementation">Implementation</h2>
+<p>We will now implement the Gradient Boosting Algorithm described above. In terms of parameters, we will need the x and y training data as well as new x data for testing. We also need to know which regressors we will be using, as well as their parameters. Since we do not know which regressors the user may want to use, we can use variable keyword arguments to deal with these parameters. In total, this would look like:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span>  <span class="token function">boosted_lwr</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> xnew<span class="token punctuation">,</span> model1<span class="token operator">=</span>Lowess_AG_MD<span class="token punctuation">,</span> model2<span class="token operator">=</span>Lowess_AG_MD<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+</code></pre>
+<p>We will select Gramfort’s Multidimensional Locally Weighted Regression as the default for our models.</p>
+<p>Next, we need to initialize and train our first model as such:</p>
+<pre class=" language-python"><code class="prism  language-python">model1 <span class="token operator">=</span> model1<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+model1<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span>
+</code></pre>
+<p>We then calculate the residuals of the first model and then initialize and train the second model with these residuals:</p>
+<pre class=" language-python"><code class="prism  language-python">residuals1 <span class="token operator">=</span> y <span class="token operator">-</span> model1<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+model2 <span class="token operator">=</span> model2<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+model2<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>x<span class="token punctuation">,</span>residuals1<span class="token punctuation">)</span>
+</code></pre>
+<p>Lastly, we calculate our output using the sum of both models:</p>
+<pre class=" language-python"><code class="prism  language-python">output <span class="token operator">=</span> model1<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>xnew<span class="token punctuation">)</span> <span class="token operator">+</span> model2<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>xnew<span class="token punctuation">)</span>
+</code></pre>
+<p>Our final Gradient Boosting function looks like this:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span>  <span class="token function">boosted_lwr</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> xnew<span class="token punctuation">,</span> model1<span class="token operator">=</span>Lowess_AG_MD<span class="token punctuation">,</span> model2<span class="token operator">=</span>Lowess_AG_MD<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	model1 <span class="token operator">=</span> model1<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+	model1<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span>
+	residuals1 <span class="token operator">=</span> y <span class="token operator">-</span> model1<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+	model2 <span class="token operator">=</span> model2<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+	model2<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>x<span class="token punctuation">,</span>residuals1<span class="token punctuation">)</span>
+	output <span class="token operator">=</span> model1<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>xnew<span class="token punctuation">)</span> <span class="token operator">+</span> model2<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>xnew<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> output
+</code></pre>
+<h2 id="testing-the-regressor-with-gramforts-lowess">Testing the Regressor with Gramfort’s Lowess</h2>
+<p>Now, we want to perform some testing for our function. We will be using a Boosted Locally Weighted Regressor to make predictions on several data sets: Cars, Concrete, and Housing. Here is a closer look at what our datasets look like:</p>
+<p><a href="cars.png">Cars</a><br>
+For the Cars Dataset, our y value is miles per gallon, MPG.</p>
+<p><a href="concrete.png">Concrete</a><br>
+For the Concrete Dataset, we will use strength as our y value.</p>
+<p><a href="housing.png">Housing</a><br>
+For the Housing Dataset, our y value will be cmedv, or Corrected Median Values (for the houses).</p>
+<h3 id="setup">Setup</h3>
+<p>We will need to prepare our data for testing by breaking it into training and testing data. For this, we will have 70% of our data being for training, while the other 30% is used for testing:</p>
+<pre class=" language-python"><code class="prism  language-python">xtrain<span class="token punctuation">,</span> xtest<span class="token punctuation">,</span> ytrain<span class="token punctuation">,</span> ytest <span class="token operator">=</span> tts<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>test_size<span class="token operator">=</span><span class="token number">0.3</span><span class="token punctuation">,</span>shuffle<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>random_state<span class="token operator">=</span><span class="token number">123</span><span class="token punctuation">)</span>
+</code></pre>
+<p>This exact line is repeated for each dataset.</p>
+<p>For the actual testing, we will look at each of the four kernels we have considered for other projects, Gaussian, Tricubic, Epanechnikov, and Quartic, to ensure that we are making a good choice for our kernel.</p>
+<p>We will be calculating our y prediction for each kernel for each dataset. We will then calculate the MSE, or mean squared error, for each of these predictions against the true y test value. That means that in total, we will have 12 different tests. This is what our code will look like:</p>
+<pre class=" language-python"><code class="prism  language-python">yhat <span class="token operator">=</span> boosted_lwr<span class="token punctuation">(</span>xtrain<span class="token punctuation">,</span>ytrain<span class="token punctuation">,</span>xtest<span class="token punctuation">,</span>Lowess_AG_MD<span class="token punctuation">,</span>Lowess_AG_MD<span class="token punctuation">,</span>f<span class="token operator">=</span><span class="token number">0.3</span><span class="token punctuation">,</span><span class="token builtin">iter</span><span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>intercept<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>kernel<span class="token operator">=</span>Tricubic<span class="token punctuation">)</span>
+mse<span class="token punctuation">(</span>ytest<span class="token punctuation">,</span>yhat<span class="token punctuation">)</span>
+</code></pre>
+<h3 id="results">Results</h3>
+<p>For each dataset, a different f value was found to be optimal for minimizing the MSE, being 0.3 for Cars, 0.015 for Concrete, and 0.1 for Housing.</p>
+<p>For each of our four kernels, it was found that the MSE was the exact same, for all datasets. This gives us confidence that our kernel selection is a good choice.</p>
+<p>In terms of the final results for MSE, we found:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">Cars</th>
+<th align="center">Concrete</th>
+<th align="center">Housing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">22.63</td>
+<td align="center">54.02</td>
+<td align="center">29.05</td>
+</tr>
+</tbody>
+</table><p>Since our error for the Cars dataset was the lowest, that means that it was our best model for our testing.</p>
+<h2 id="k-fold-cross-validation">K-Fold Cross Validation</h2>
+<p>Expanding on the testing, we will now use K-Fold Cross Validation to compare our Gramfort’s Lowess regressor with our other Lowess regressor and a Random Forest regressor.</p>
+<h3 id="setup-1">Setup</h3>
+<p>In terms of parameters, we will be using the same parameters for our Gramfort’s Lowess as we did in the previous testing section. For Lowess, it was found that using a Gaussian kernel with a tau values of 0.18, 0.04, and 0.17 for the Cars, Concrete, and Housing datasets, respectively, yielded the best results. Lastly, we will be using 200 estimators with a max depth of 3 for our Random Forest regressors.</p>
+<pre class=" language-python"><code class="prism  language-python">model_lw <span class="token operator">=</span> Lowess<span class="token punctuation">(</span>kernel<span class="token operator">=</span>Gaussian<span class="token punctuation">,</span>tau<span class="token operator">=</span><span class="token number">0.18</span><span class="token punctuation">)</span>
+model_lw_ag <span class="token operator">=</span> Lowess_AG_MD<span class="token punctuation">(</span>f<span class="token operator">=</span><span class="token number">0.3</span><span class="token punctuation">,</span><span class="token builtin">iter</span><span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>intercept<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>kernel<span class="token operator">=</span>Tricubic<span class="token punctuation">)</span>
+model_rf <span class="token operator">=</span> RandomForestRegressor<span class="token punctuation">(</span>n_estimators<span class="token operator">=</span><span class="token number">200</span><span class="token punctuation">,</span>max_depth<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span>
+</code></pre>
+<p>We also need to use KFold to shuffle and split our data:</p>
+<pre class=" language-python"><code class="prism  language-python">kf <span class="token operator">=</span> KFold<span class="token punctuation">(</span>n_splits<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span>shuffle<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>random_state<span class="token operator">=</span><span class="token number">1234</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Now, for each KFold, we will split the data into training and testing sets, being sure to scale our x values:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> idxtrain<span class="token punctuation">,</span> idxtest <span class="token keyword">in</span> kf<span class="token punctuation">.</span>split<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	xtrain <span class="token operator">=</span> x<span class="token punctuation">[</span>idxtrain<span class="token punctuation">]</span>
+	ytrain <span class="token operator">=</span> y<span class="token punctuation">[</span>idxtrain<span class="token punctuation">]</span>
+	ytest <span class="token operator">=</span> y<span class="token punctuation">[</span>idxtest<span class="token punctuation">]</span>
+	xtest <span class="token operator">=</span> x<span class="token punctuation">[</span>idxtest<span class="token punctuation">]</span>
+	xtrain <span class="token operator">=</span> scale<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>xtrain<span class="token punctuation">)</span>
+	xtest <span class="token operator">=</span> scale<span class="token punctuation">.</span>transform<span class="token punctuation">(</span>xtest<span class="token punctuation">)</span>
+</code></pre>
+<p>We will be comparing the results of each of the three models against each other as well as their boosted counterparts. That means we will need to predict 6 different y-hat values as such:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token comment"># Lowess</span>
+model_lw<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>xtrain<span class="token punctuation">,</span>ytrain<span class="token punctuation">)</span>
+yhat_lw <span class="token operator">=</span> model_lw<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>xtest<span class="token punctuation">)</span>
+  
+yhat_lw_b <span class="token operator">=</span> boosted_lwr<span class="token punctuation">(</span>xtrain<span class="token punctuation">,</span>ytrain<span class="token punctuation">,</span>xtest<span class="token punctuation">,</span>Lowess<span class="token punctuation">,</span>Lowess<span class="token punctuation">,</span>kernel<span class="token operator">=</span>Gaussian<span class="token punctuation">,</span>tau<span class="token operator">=</span><span class="token number">0.18</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Lowess Gramfort</span>
+model_lw_ag<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>xtrain<span class="token punctuation">,</span>ytrain<span class="token punctuation">)</span>
+yhat_lw_ag <span class="token operator">=</span> model_lw_ag<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>xtest<span class="token punctuation">)</span>
+
+yhat_lw_ag_b <span class="token operator">=</span> boosted_lwr<span class="token punctuation">(</span>xtrain<span class="token punctuation">,</span>ytrain<span class="token punctuation">,</span>xtest<span class="token punctuation">,</span>Lowess_AG_MD<span class="token punctuation">,</span>Lowess_AG_MD<span class="token punctuation">,</span>f<span class="token operator">=</span><span class="token number">0.3</span><span class="token punctuation">,</span><span class="token builtin">iter</span><span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>intercept<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>kernel<span class="token operator">=</span>Tricubic<span class="token punctuation">)</span>
+
+<span class="token comment"># Random Forest</span>
+model_rf<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>xtrain<span class="token punctuation">,</span>ytrain<span class="token punctuation">)</span>
+yhat_rf <span class="token operator">=</span> model_rf<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>xtest<span class="token punctuation">)</span>
+
+yhat_rf_b <span class="token operator">=</span> boosted_lwr<span class="token punctuation">(</span>xtrain<span class="token punctuation">,</span>ytrain<span class="token punctuation">,</span>xtest<span class="token punctuation">,</span>RandomForestRegressor<span class="token punctuation">,</span>RandomForestRegressor<span class="token punctuation">,</span>n_estimators<span class="token operator">=</span><span class="token number">200</span><span class="token punctuation">,</span>max_depth<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span>
+</code></pre>
+<p>We then need to calculate the MSE for each of these y-hats with the respective y-test values and store them for later:</p>
+<pre class=" language-python"><code class="prism  language-python">mse_lwr<span class="token punctuation">.</span>append<span class="token punctuation">(</span>mse<span class="token punctuation">(</span>ytest<span class="token punctuation">,</span>yhat_lw<span class="token punctuation">)</span><span class="token punctuation">)</span>
+mse_lwr_b<span class="token punctuation">.</span>append<span class="token punctuation">(</span>mse<span class="token punctuation">(</span>ytest<span class="token punctuation">,</span>yhat_lw_b<span class="token punctuation">)</span><span class="token punctuation">)</span>
+mse_lwr_ag<span class="token punctuation">.</span>append<span class="token punctuation">(</span>mse<span class="token punctuation">(</span>ytest<span class="token punctuation">,</span>yhat_lw_ag<span class="token punctuation">)</span><span class="token punctuation">)</span>
+mse_lwr_ag_b<span class="token punctuation">.</span>append<span class="token punctuation">(</span>mse<span class="token punctuation">(</span>ytest<span class="token punctuation">,</span>yhat_lw_ag_b<span class="token punctuation">)</span><span class="token punctuation">)</span>
+mse_rf<span class="token punctuation">.</span>append<span class="token punctuation">(</span>mse<span class="token punctuation">(</span>ytest<span class="token punctuation">,</span>yhat_rf<span class="token punctuation">)</span><span class="token punctuation">)</span>
+mse_rf_b<span class="token punctuation">.</span>append<span class="token punctuation">(</span>mse<span class="token punctuation">(</span>ytest<span class="token punctuation">,</span>yhat_rf_b<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Lastly, after these steps have been done for each fold, we will calculate the average MSE for each and display them to the user:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'The Cross-validated Mean Squared Error for Locally Weighted Regression is : '</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>mse_lwr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'The Cross-validated Mean Squared Error for Boosted Locally Weighted Regression is : '</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>mse_lwr_b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"The Cross-validated Mean Squared Error for Gramfort's Locally Weighted Regression is : "</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>mse_lwr_ag<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"The Cross-validated Mean Squared Error for Boosted Gramfort's Locally Weighted Regression is : "</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>mse_lwr_ag_b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'The Cross-validated Mean Squared Error for Random Forest is : '</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>mse_rf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'The Cross-validated Mean Squared Error for Boosted Random Forest is : '</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>mse_rf_b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="results-1">Results</h3>
+<p>Here are our final average MSE values:</p>
+<h4 id="cars">Cars</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Boosted?</th>
+<th align="center">Lowess</th>
+<th align="center">Gramfort’s Lowess</th>
+<th align="center">Random Forest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">No</td>
+<td align="center">17.13</td>
+<td align="center">23.54</td>
+<td align="center">16.62</td>
+</tr>
+<tr>
+<td align="center">Yes</td>
+<td align="center">17.38</td>
+<td align="center">23.53</td>
+<td align="center">16.20</td>
+</tr>
+</tbody>
+</table><h4 id="concrete">Concrete</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Boosted?</th>
+<th align="center">Lowess</th>
+<th align="center">Gramfort’s Lowess</th>
+<th align="center">Random Forest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">No</td>
+<td align="center">800.48</td>
+<td align="center">44.73</td>
+<td align="center">86.64</td>
+</tr>
+<tr>
+<td align="center">Yes</td>
+<td align="center">800.42</td>
+<td align="center">44.88</td>
+<td align="center">55.40</td>
+</tr>
+</tbody>
+</table><h4 id="housing">Housing</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Boosted?</th>
+<th align="center">Lowess</th>
+<th align="center">Gramfort’s Lowess</th>
+<th align="center">Random Forest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">No</td>
+<td align="center">121.23</td>
+<td align="center">16.12</td>
+<td align="center">17.67</td>
+</tr>
+<tr>
+<td align="center">Yes</td>
+<td align="center">121.93</td>
+<td align="center">16.12</td>
+<td align="center">13.85</td>
+</tr>
+</tbody>
+</table><p>As we can see, Gradient Boosting is capable of increasing the strength of our models. It is not always the case, as we can see some instances above where the score of the boosted version of the model had a slightly higher MSE. In certain situations, the boosting algorithm made a massive difference, such as for the Housing’s Random Forest, as it changed from being the second best model to the best model for that particular dataset. Our KFold Cross Validation reveals that different models predict certain data better than others. This highlights the importance of testing a large variety of models with different hyperparameters. Overall, we have been able to show how Gradient Boosting can be a useful technique for improving on weaker regressors without complicating our model.</p>
+</div>
+</body>
+
+</html>
